@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compound Interest & Investment Calculator — Monthly Contributions & Growth</title>
+  <meta name="description" content="Free Compound Interest & Investment Calculator. Estimate long-term wealth, S&P 500 returns, 401(k) growth, and passive income with monthly contributions.">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --input-bg: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #059669;
+      --accent-hover: #047857;
+      --blue: #2563eb;
+      --indigo: #4f46e5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { min-height: 100vh; background: var(--bg); color: var(--text); line-height: 1.6; padding: 20px 14px 50px; }
+    .container { max-width: 780px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 24px; }
+    header h1 { font-size: 1.85rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+    header h1 span { color: var(--accent); }
+    header p { color: var(--muted); font-size: 0.98rem; }
+    .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 14px; text-align: center; color: var(--muted); font-size: 0.8rem; margin-bottom: 22px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); margin-bottom: 24px; }
+    .section-label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+    .presets { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 20px; }
+    .preset-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; border-radius: 10px; cursor: pointer; text-align: left; transition: 0.15s; }
+    .preset-btn:hover { border-color: var(--accent); }
+    .preset-btn.active { border-color: var(--accent); background: rgba(5, 150, 105, 0.08); }
+    .preset-name { display: block; font-weight: 700; font-size: 0.86rem; }
+    .preset-rate { display: block; font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.86rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .field input, .field select { width: 100%; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 11px 13px; border-radius: 10px; font-size: 0.98rem; font-weight: 600; outline: none; }
+    .field input:focus, .field select:focus { border-color: var(--accent); background: #fff; }
+    .hero-result { background: linear-gradient(135deg, #064e3b, #065f46); color: #fff; border-radius: 14px; padding: 20px; text-align: center; margin-top: 20px; }
+    .hero-label { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+    .hero-val { font-size: 2.2rem; font-weight: 800; margin: 4px 0; }
+    .hero-sub { font-size: 0.86rem; opacity: 0.9; }
+    .bar-wrap { height: 12px; border-radius: 99px; background: #e2e8f0; overflow: hidden; display: flex; margin: 16px 0 8px; }
+    .bar-init { background: var(--blue); height: 100%; transition: width 0.3s; }
+    .bar-contrib { background: var(--indigo); height: 100%; transition: width 0.3s; }
+    .bar-interest { background: var(--accent); height: 100%; transition: width 0.3s; }
+    .legend { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; }
+    .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+    .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .res-box { background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+    .res-title { font-size: 0.76rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+    .res-val { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .seo-block { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 22px; }
+    .seo-block h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text); }
+    .seo-block p { color: var(--muted); font-size: 0.92rem; margin-bottom: 12px; }
+    .hub-links { padding: 18px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); text-align: center; font-size: 0.9rem; }
+    .hub-links strong { display: block; margin-bottom: 8px; color: var(--text); }
+    .hub-links a { color: var(--blue); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-block; padding: 2px 0; }
+    .hub-links a:hover { text-decoration: underline; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; }
+    @media (max-width: 640px) { .grid-2, .results { grid-template-columns: 1fr; } header h1 { font-size: 1.5rem; } .hero-val { font-size: 1.8rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Compound Interest & <span>Investment</span> Calculator</h1>
+    <p>Project long-term wealth growth with monthly contributions and compound returns.</p>
+  </header>
+
+  <div class="ad-slot">Advertisement Space (Google AdSense Ready)</div>
+
+  <main class="card">
+    <span class="section-label">1. Popular Strategy Presets</span>
+    <div class="presets">
+      <button class="preset-btn active" onclick="applyPreset(5000, 500, 10, 15, 12, this)">
+        <span class="preset-name">S&P 500 Index Fund</span>
+        <span class="preset-rate">10% APY · 15 Years</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset(10000, 800, 8, 25, 12, this)">
+        <span class="preset-name">401(k) / IRA Retirement</span>
+        <span class="preset-rate">8% APY · 25 Years</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset(10000, 300, 4.5, 5, 12, this)">
+        <span class="preset-name">High-Yield Savings</span>
+        <span class="preset-rate">4.5% APY · 5 Years</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset(25000, 1000, 7, 10, 12, this)">
+        <span class="preset-name">Dividend Portfolio</span>
+        <span class="preset-rate">7% APY · 10 Years</span>
+      </button>
+    </div>
+
+    <span class="section-label">2. Investment Parameters</span>
+    <div class="grid-2">
+      <div class="field">
+        <label for="initial">Initial Deposit ($ USD)</label>
+        <input type="number" id="initial" value="5000" min="0" step="500" oninput="clearPreset(); calculate()">
+      </div>
+      <div class="field">
+        <label for="monthly">Monthly Contribution ($ USD)</label>
+        <input type="number" id="monthly" value="500" min="0" step="50" oninput="clearPreset(); calculate()">
+      </div>
+      <div class="field">
+        <label for="rate">Estimated Annual Return (%)</label>
+        <input type="number" id="rate" value="10" min="0" max="100" step="0.1" oninput="clearPreset(); calculate()">
+      </div>
+      <div class="field">
+        <label for="years">Investment Timeframe (Years)</label>
+        <input type="number" id="years" value="15" min="1" max="60" step="1" oninput="clearPreset(); calculate()">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="freq">Compounding Frequency</label>
+      <select id="freq" onchange="calculate()">
+        <option value="12" selected>Monthly Compounding (Standard)</option>
+        <option value="365">Daily Compounding</option>
+        <option value="4">Quarterly Compounding</option>
+        <option value="1">Annually Compounding</option>
+      </select>
+    </div>
+
+    <div class="hero-result">
+      <div class="hero-label">Future Portfolio Value</div>
+      <div class="hero-val" id="res-total">$229,670.48</div>
+      <div class="hero-sub" id="res-mult">Your money multiplied by 2.42x over 15 years</div>
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar-init" id="bar-init" style="width: 5%"></div>
+      <div class="bar-contrib" id="bar-contrib" style="width: 39%"></div>
+      <div class="bar-interest" id="bar-interest" style="width: 56%"></div>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--blue)"></i>Initial Deposit</span>
+      <span><i class="dot" style="background:var(--indigo)"></i>Monthly Contributions</span>
+      <span><i class="dot" style="background:var(--accent)"></i>Compound Interest Earned</span>
+    </div>
+
+    <div class="results">
+      <div class="res-box">
+        <div class="res-title">Initial Deposit</div>
+        <div class="res-val" id="res-init" style="color:var(--blue)">$5,000.00</div>
+      </div>
+      <div class="res-box">
+        <div class="res-title">Total Contributions</div>
+        <div class="res-val" id="res-contrib" style="color:var(--indigo)">$90,000.00</div>
+      </div>
+      <div class="res-box">
+        <div class="res-title">Total Interest Earned</div>
+        <div class="res-val" id="res-interest" style="color:var(--accent)">$134,670.48</div>
+      </div>
+    </div>
+  </main>
+
+  <section class="seo-block">
+    <h2>How Compound Interest Accelerates Wealth</h2>
+    <p><strong>Compound interest</strong> occurs when your investment earnings generate their own earnings over time. Unlike simple interest, which is calculated only on your initial principal, compounding reinvests your dividends and returns every month or year.</p>
+    <p>Consistent monthly contributions combined with time in the market create a snowball effect. Historically, the US S&P 500 index has delivered an average annual return of roughly 9% to 10% over long multi-decade horizons.</p>
+  </section>
+
+  <nav class="hub-links">
+    <strong>More Free Financial & Tech Calculators:</strong>
+    <a href="https://github.io" target="_blank">Freelance Fee Calculator</a> |
+    <a href="https://github.io" target="_blank">Crypto Staking & APY Calculator</a> |
+    <a href="https://github.io" target="_blank">AI Token & LLM API Cost Calculator</a> |
+    <a href="https://github.io" target="_blank">ROAS & Ad ROI Calculator</a>
+  </nav>
+
+  <footer>
+    <p>Free Compound Interest & 401(k) Calculator · Instant browser-based projection, no data stored.</p>
+  </footer>
+</div>
+<script>
+  function applyPreset(init, monthly, rate, years, freq, btn) {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('initial').value = init;
+    document.getElementById('monthly').value = monthly;
+    document.getElementById('rate').value = rate;
+    document.getElementById('years').value = years;
+    document.getElementById('freq').value = freq;
+    calculate();
+  }
+
+  function clearPreset() {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  }
+
+  function fmtUSD(val) {
+    return '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function calculate() {
+    const initial = Math.max(0, parseFloat(document.getElementById('initial').value) || 0);
+    const monthly = Math.max(0, parseFloat(document.getElementById('monthly').value) || 0);
+    const annualRate = Math.max(0, parseFloat(document.getElementById('rate').value) || 0) / 100;
+    const years = Math.min(60, Math.max(1, parseInt(document.getElementById('years').value) || 1));
+    const n = parseInt(document.getElementById('freq').value) || 12;
+
+    const totalMonths = years * 12;
+    const effMonthlyRate = Math.pow(1 + annualRate / n, n / 12) - 1;
+
+    let balance = initial;
+    for (let m = 0; m < totalMonths; m++) {
+      balance = (balance + monthly) * (1 + effMonthlyRate);
+    }
+
+    const totalContrib = monthly * totalMonths;
+    const principalTotal = initial + totalContrib;
+    const totalInterest = Math.max(0, balance - principalTotal);
+    const multiplier = principalTotal > 0 ? balance / principalTotal : 1;
+
+    document.getElementById('res-total').innerText = fmtUSD(balance);
+    document.getElementById('res-mult').innerText =
+      `Your invested cash multiplied by ${multiplier.toFixed(2)}x over ${years} ${years === 1 ? 'year' : 'years'}`;
+
+    document.getElementById('res-init').innerText = fmtUSD(initial);
+    document.getElementById('res-contrib').innerText = fmtUSD(totalContrib);
+    document.getElementById('res-interest').innerText = fmtUSD(totalInterest);
+
+    if (balance > 0) {
+      const pInit = (initial / balance) * 100;
+      const pContrib = (totalContrib / balance) * 100;
+      const pInt = Math.max(0, 100 - pInit - pContrib);
+      document.getElementById('bar-init').style.width = pInit.toFixed(1) + '%';
+      document.getElementById('bar-contrib').style.width = pContrib.toFixed(1) + '%';
+      document.getElementById('bar-interest').style.width = pInt.toFixed(1) + '%';
+    }
+  }
+
+  calculate();
+</script>
+</body>
+</html>
