@@ -66,9 +66,13 @@
 <body>
 <div class="container">
   <header>
+    <div style="display:inline-flex; align-items:center; gap:6px; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-size:0.78rem; font-weight:700; padding:4px 12px; border-radius:999px; margin-bottom:12px;">
+      <span>&#9679;</span> Updated Nov 2026 &bull; Real-time Formula
+    </div>
     <h1>Compound Interest & <span>Investment</span> Calculator</h1>
     <p>Project long-term wealth growth with monthly contributions and compound returns.</p>
   </header>
+
 
   <div class="ad-slot">Advertisement Space (Google AdSense Ready)</div>
 
@@ -257,8 +261,22 @@
     }
   }
 
-  calculate();
+  (function initFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const pInit = params.get('initial');
+    const pMonthly = params.get('monthly');
+    const pRate = params.get('rate');
+    const pYears = params.get('years');
+    let hasCustom = false;
+    if (pInit && !isNaN(parseFloat(pInit))) { document.getElementById('initial').value = parseFloat(pInit); hasCustom = true; }
+    if (pMonthly && !isNaN(parseFloat(pMonthly))) { document.getElementById('monthly').value = parseFloat(pMonthly); hasCustom = true; }
+    if (pRate && !isNaN(parseFloat(pRate))) { document.getElementById('rate').value = parseFloat(pRate); hasCustom = true; }
+    if (pYears && !isNaN(parseInt(pYears))) { document.getElementById('years').value = parseInt(pYears); hasCustom = true; }
+    if (hasCustom) clearPreset();
+    calculate();
+  })();
 </script>
+
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c1d700a5fdf540fa94f43b52a8651a2f"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
