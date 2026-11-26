@@ -158,7 +158,11 @@
         <div class="res-val" id="res-interest" style="color:var(--accent)">$134,670.48</div>
       </div>
     </div>
+    <div style="margin-top:16px; display:flex; justify-content:center;">
+      <button type="button" id="share-est-btn" onclick="copyShareLink()" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-weight:700; font-size:0.84rem; padding:9px 16px; border-radius:9px; cursor:pointer;">&#128279; Copy Estimate Link</button>
+    </div>
   </main>
+
 
   <section class="seo-block">
     <h2>How Compound Interest Accelerates Wealth</h2>
@@ -261,20 +265,36 @@
     }
   }
 
+  function copyShareLink() {
+    const init = document.getElementById('initial').value || 5000;
+    const monthly = document.getElementById('monthly').value || 500;
+    const rate = document.getElementById('rate').value || 10;
+    const years = document.getElementById('years').value || 15;
+    const freq = document.getElementById('freq').value || 12;
+    const url = window.location.origin + window.location.pathname + '?initial=' + encodeURIComponent(init) + '&monthly=' + encodeURIComponent(monthly) + '&rate=' + encodeURIComponent(rate) + '&years=' + encodeURIComponent(years) + '&freq=' + encodeURIComponent(freq);
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('share-est-btn');
+      if (btn) { btn.innerHTML = '&#10003; Link Copied!'; setTimeout(() => { btn.innerHTML = '&#128279; Copy Estimate Link'; }, 1800); }
+    });
+  }
+
   (function initFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const pInit = params.get('initial');
     const pMonthly = params.get('monthly');
     const pRate = params.get('rate');
     const pYears = params.get('years');
+    const pFreq = params.get('freq');
     let hasCustom = false;
     if (pInit && !isNaN(parseFloat(pInit))) { document.getElementById('initial').value = parseFloat(pInit); hasCustom = true; }
     if (pMonthly && !isNaN(parseFloat(pMonthly))) { document.getElementById('monthly').value = parseFloat(pMonthly); hasCustom = true; }
     if (pRate && !isNaN(parseFloat(pRate))) { document.getElementById('rate').value = parseFloat(pRate); hasCustom = true; }
     if (pYears && !isNaN(parseInt(pYears))) { document.getElementById('years').value = parseInt(pYears); hasCustom = true; }
+    if (pFreq && ['12','365','4','1'].includes(pFreq)) { document.getElementById('freq').value = pFreq; hasCustom = true; }
     if (hasCustom) clearPreset();
     calculate();
   })();
+
 </script>
 
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c1d700a5fdf540fa94f43b52a8651a2f"}'></script><!-- End Cloudflare Web Analytics -->
