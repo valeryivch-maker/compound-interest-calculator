@@ -60,8 +60,14 @@
     .hub-links a { color: var(--blue); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-block; padding: 2px 0; }
     .hub-links a:hover { text-decoration: underline; }
     footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 24px; }
+    .legal-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .legal-links a { color: var(--blue); text-decoration: none; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+    .legal-links a:hover { text-decoration: underline; }
+    .legal-details { max-width: 680px; margin: 12px auto 0; text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 0.78rem; line-height: 1.5; color: #475569; display: none; }
+    .legal-details.open { display: block; }
     @media (max-width: 640px) { .grid-2, .results { grid-template-columns: 1fr; } header h1 { font-size: 1.5rem; } .hero-val { font-size: 1.8rem; } }
   </style>
+
 </head>
 <body>
 <div class="container">
@@ -204,8 +210,20 @@
   </nav>
 
   <footer>
-    <p>Free Compound Interest & 401(k) Calculator · Instant browser-based projection, no data stored.</p>
+    <p>&copy; 2026 Smart Finance &amp; Tech Calculators &bull; Compound Interest &amp; 401(k) Utility</p>
+    <p style="margin-top:6px; font-size:0.76rem;"><strong>FTC Affiliate Disclosure:</strong> Some links on this page (including Interactive Brokers and Webull) are partner referrals. We may earn a commission at no extra cost to you.</p>
+    <div class="legal-links">
+      <a onclick="toggleLegal('privacy')">Privacy Policy</a>
+      <a onclick="toggleLegal('disclaimer')">Investment &amp; Financial Disclaimer</a>
+    </div>
+    <div id="legal-privacy" class="legal-details">
+      <strong>Privacy Policy (Updated Nov 2026):</strong> All compound interest, 401(k), and contribution projections run 100% locally in your browser. We do not collect, store, or transmit your deposit amounts or portfolio parameters. We use privacy-first, cookieless Cloudflare Web Analytics solely to measure aggregate traffic without cross-site tracking.
+    </div>
+    <div id="legal-disclaimer" class="legal-details">
+      <strong>Investment &amp; Financial Disclaimer:</strong> Compound interest projections and historical S&amp;P 500 return benchmarks are provided strictly for informational and educational purposes and do not constitute investment, tax, or financial advice. All investing involves market risk and potential loss of principal; past performance does not guarantee future results.
+    </div>
   </footer>
+
 </div>
 <script>
   function applyPreset(init, monthly, rate, years, freq, btn) {
@@ -295,7 +313,16 @@
     calculate();
   })();
 
+  function toggleLegal(type) {
+    ['privacy', 'disclaimer'].forEach(k => {
+      const el = document.getElementById('legal-' + k);
+      if (!el) return;
+      if (k === type) el.classList.toggle('open');
+      else el.classList.remove('open');
+    });
+  }
 </script>
+
 
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c1d700a5fdf540fa94f43b52a8651a2f"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
